@@ -2,15 +2,15 @@
 
 import { createOpenAI } from "@ai-sdk/openai";
 
-(()=>{
-  if (!process.env.NAN_BASE_URL ){
+(() => {
+  if (!process.env.NAN_BASE_URL) {
     throw new Error("Missing NAN_BASE_URL  config");
   }
-  
-  if (!process.env.NAN_API_KEY)  {
+
+  if (!process.env.NAN_API_KEY) {
     throw new Error("Missing NAN_API_KEY  config");
   }
-})()
+})();
 
 const NaNProvider = createOpenAI({
   baseURL: process.env.NAN_BASE_URL,
@@ -18,6 +18,6 @@ const NaNProvider = createOpenAI({
 });
 
 export const models = {
-  distillModel: NaNProvider("deepseek-v4-flash"),
+  saveModel: NaNProvider("mimo-v2.6-flash"),
   queryModel: NaNProvider("glm5.3-flash"),
 };
