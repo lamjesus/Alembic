@@ -1,0 +1,26 @@
+{
+    "projects": [
+      {
+        "id": "project-id",
+        "name": "AI engineering Project",
+        "description": "It is my AI project",
+        "status": "IN_PROGRESS",
+        "statusReason": "",
+        "createdAt": "2026-10-09",
+        "targetCloseDate": "2026-11-20"
+      }
+    ],
+    "areas": [
+      {
+        "id": 1,
+        "name": "FINANCES",
+        "description": "FINANCES topics"
+      },
+      {
+        "id": "health-id",
+        "name": "HEALTH",
+        "description": "health topics"
+      }
+    ]
+  }
+  
