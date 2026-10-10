@@ -1,6 +1,7 @@
 // src/llm/provider.ts
 
-import { createOpenAI } from "@ai-sdk/openai";
+import { createOpenAI, OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
+import { defaultSettingsMiddleware, wrapLanguageModel } from "ai";
 
 (() => {
   if (!process.env.NAN_BASE_URL) {
@@ -11,13 +12,27 @@ import { createOpenAI } from "@ai-sdk/openai";
     throw new Error("Missing NAN_API_KEY  config");
   }
 })();
+type NaNModelId = "mimo-v2.6-flash" | "glm5.3-flash";
 
 const NaNProvider = createOpenAI({
   baseURL: process.env.NAN_BASE_URL,
   apiKey: process.env.NAN_API_KEY,
 });
 
+const nanModel = (modelId: NaNModelId) => {
+  return wrapLanguageModel({
+    model: NaNProvider(modelId),
+    middleware: defaultSettingsMiddleware({
+      settings: {
+        providerOptions: {
+          openai: { store: false } satisfies OpenAIResponsesProviderOptions,
+        },
+      },
+    }),
+  });
+};
+
 export const models = {
-  saveModel: NaNProvider("mimo-v2.6-flash"),
-  queryModel: NaNProvider("glm5.3-flash"),
+  saveModel: nanModel("mimo-v2.6-flash"),
+  queryModel: nanModel("glm5.3-flash"),
 };
