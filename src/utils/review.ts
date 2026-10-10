@@ -27,7 +27,6 @@ export function checkInput(content: string): ReviewReason[] {
 
 // Runs AFTER the call: model signals plus deterministic checks.
 export function checkOutput(
-  content: string,
   distillation: Distillation,
   finishReason: FinishReason,
 ): ReviewReason[] {

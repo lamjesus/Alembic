@@ -1,12 +1,6 @@
 import "dotenv/config";
 import { readFileSync } from "node:fs";
-import {
-  FinishReason,
-  generateText,
-  LanguageModelUsage,
-  Output,
-  streamText,
-} from "ai";
+import { generateText, Output } from "ai";
 import { models } from "./llm/provider";
 import { SAVE_INSTRUCTIONS } from "./llm/prompts";
 import { DistillationSchema } from "./llm/schemas";
@@ -17,33 +11,11 @@ import {
   type Distillation,
   type ReviewDecision,
 } from "./utils/review";
+import { loadDeclared } from "./data/declared";
 
 type DistillResult =
   | { status: "skipped"; review: ReviewDecision }
   | { status: "distilled"; distillation: Distillation; review: ReviewDecision };
-
-async function ask(
-  prompt: string,
-  instructions: string,
-): Promise<{
-  text: string;
-  tokens: number | undefined;
-  finishReason: FinishReason;
-}> {
-  const result = await generateText({
-    model: models.saveModel,
-    prompt,
-    instructions,
-  });
-  console.log(result.text);
-  console.log("finish reason", result.finishReason);
-  console.log("usage", result.usage);
-  return {
-    text: result.text,
-    tokens: result.usage.totalTokens,
-    finishReason: result.finishReason,
-  };
-}
 
 async function distill(content: string): Promise<DistillResult> {
   const inputReasons = checkInput(content);
@@ -52,15 +24,20 @@ async function distill(content: string): Promise<DistillResult> {
   }
 
   try {
+    // Part C, option "instructions": the declared list goes in the trusted instructions,
+    // never in the prompt (the prompt is external content). If loading fails, it throws here.
+    const declared = loadDeclared();
     const result = await generateText({
       model: models.saveModel,
       prompt: content,
-      instructions: SAVE_INSTRUCTIONS,
+      instructions: `${SAVE_INSTRUCTIONS}\nUser's declared projects and areas (JSON):\n${JSON.stringify(declared)}`,
       output: Output.object({ schema: DistillationSchema }),
     });
     const review = decideReview(
-      checkOutput(content, result.output, result.finishReason),
+      checkOutput(result.output, result.finishReason),
     );
+    console.log("stop reason\n", result.finishReason);
+    console.log("steps \n", result.steps.length);
     return { status: "distilled", distillation: result.output, review };
   } catch (error) {
     console.error(error);
@@ -68,7 +45,5 @@ async function distill(content: string): Promise<DistillResult> {
   }
 }
 
-//await ask(readFileSync("samples/article.txt", "utf8"), SAVE_INSTRUCTIONS);
-//const distilled = await distill(readFileSync("samples/article2.txt", "utf8"));
-const distilled = await distill("Notas del hackathon de NaN");
+const distilled = await distill(readFileSync("samples/article.txt", "utf8"));
 console.dir(distilled, { depth: null });
