@@ -2,7 +2,7 @@
 
 A personal knowledge agent built on one loop: **capture → distill → organize → return**.
 
-I save articles, PDFs and notes "for later", and they never come back. Alembic reads what I save, distills it into the ideas that matter, organizes it against my own projects and areas (PARA), and gives it back when I need it, citing where each answer comes from.
+I save articles, web pages, PDFs, videos and notes "for later", and they never come back. Alembic reads what I save, distills it into the ideas that matter, organizes it against my own projects and areas (PARA), and gives it back when I need it, citing where each answer comes from.
 
 > **Work in progress, built in public.** I'm writing every piece myself while learning AI engineering, and I post what works and what breaks along the way.
 
@@ -12,7 +12,7 @@ I save articles, PDFs and notes "for later", and they never come back. Alembic r
 |---|---|
 | **Distill** | Works: the model returns a fixed structure (key ideas, anchor phrase, core idea, injection flag), validated with Zod |
 | **Organize** | In progress: classifies into PARA (project, area, resource) using my declared projects and areas |
-| **Capture** | Next: ingest URLs and PDFs |
+| **Capture** | Next: web pages (URLs), PDFs and notes. Later: video and audio, transcribed with Whisper and fed into the same loop |
 | **Return** | Planned: answers with cited sources (RAG over pgvector) and evals in CI |
 
 ## Decisions so far
