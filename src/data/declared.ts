@@ -15,24 +15,24 @@ const LIVE_STATUSES: ReadonlySet<Declared["projects"][number]["status"]> = new S
 
 // Reads, validates and filters the user's declared projects and areas.
 // Any failure throws: the caller decides what to do, nothing fails silently.
-export function loadDeclared(): Declared {
+export function loadDeclared(path: string = DECLARED_PATH): Declared {
   let raw: string;
   try {
-    raw = readFileSync(DECLARED_PATH, "utf8");
+    raw = readFileSync(path, "utf8");
   } catch (error) {
-    throw new Error(`Cannot read ${DECLARED_PATH}`, { cause: error });
+    throw new Error(`Cannot read ${path}`, { cause: error });
   }
 
   let json: unknown;
   try {
     json = JSON.parse(raw);
   } catch (error) {
-    throw new Error(`${DECLARED_PATH} is not valid JSON`, { cause: error });
+    throw new Error(`${path} is not valid JSON`, { cause: error });
   }
 
   const result = DeclaredSchema.safeParse(json);
   if (!result.success) {
-    throw new Error(`${DECLARED_PATH} does not match DeclaredSchema`, {
+    throw new Error(`${path} does not match DeclaredSchema`, {
       cause: result.error,
     });
   }
