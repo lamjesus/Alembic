@@ -1,7 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { distill } from "../src/index";
 const contenido =
-  " esta leccion tomo mucho mas de  lo esperado que opinas, porque paso?";
+  "Vector databases store embeddings so that similar texts can be found by distance. In production, teams chunk documents, embed each chunk and retrieve the closest ones by cosine similarity.";
 
 type Caso = {
   nombre: string;
