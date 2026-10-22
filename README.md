@@ -17,10 +17,10 @@ I save articles, web pages, PDFs, videos and notes "for later", and they never c
 
 ## Decisions so far
 
-- **The provider is isolated.** Every model call goes through `src/llm/provider.ts`. Swapping the platform or a model is a one-line change, because the platform I first built on retired the agent I was using.
+- **The provider is isolated.** Every model call in `src/` goes through `src/llm/provider.ts`, because the platform I first built on retired the agent I was using. Changing the model or the platform touches only that file. It does not mean the rest behaves the same: in my probes, tool calling and structured output changed from model to model, so a swap means rerunning them.
 - **What the code can check, the model is never asked.** Empty input never reaches the model, and the code (not the model) decides what goes to manual review (`src/utils/review.ts`).
 - **A fixed output structure guarantees shape, not truth.** The schema stops format drift, but the content is still checked in code.
-- **My projects go in the instructions, not behind a tool.** In my tests, asking for structured output stopped the model from calling the tool, so the declared list is passed as trusted context instead.
+- **My projects go in the instructions, not behind a tool.** On the two models Alembic uses, asking for structured output made them skip the tool (0 calls, even with the tool marked as required); other models on the same platform did call it. So the declared list is passed as trusted context instead.
 - **Stateless calls on purpose.** The provider does not store conversations, so every call carries the full context (`store: false`, set once in the provider).
 
 ## Stack
