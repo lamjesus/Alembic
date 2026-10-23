@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { APICallError, generateText, Output, RetryError, type LanguageModel } from "ai";
 import { models } from "./llm/provider";
 import { SAVE_INSTRUCTIONS } from "./llm/prompts";
@@ -87,10 +88,15 @@ const ACTION_BY_NEXT_STEP: Record<NextStep, string> = {
   "fix-config": "would stop everything: fix your config (key or declared.json)",
 };
 
-const distilled = await distill(readFileSync("samples/article.txt", "utf8"));
-if (distilled.status === "failed") {
-  console.error(`failed (${distilled.nextStep}): ${ACTION_BY_NEXT_STEP[distilled.nextStep]}`);
-  console.error(distilled.error.message);
-} else {
-  console.dir(distilled, { depth: null });
+// Only when run directly (yarn start): importing distill() from evals or probes must not trigger a real call.
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const distilled = await distill(readFileSync("samples/article.txt", "utf8"));
+  if (distilled.status === "failed") {
+    console.error(`failed (${distilled.nextStep}): ${ACTION_BY_NEXT_STEP[distilled.nextStep]}`);
+    console.error(distilled.error.message);
+  } else {
+    console.dir(distilled, { depth: null });
+  }
 }
+
+
