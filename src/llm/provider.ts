@@ -1,7 +1,6 @@
 // src/llm/provider.ts
 
-import { createOpenAI, OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
-import { defaultSettingsMiddleware, wrapLanguageModel } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
 
 (() => {
   if (!process.env.NAN_BASE_URL) {
@@ -19,18 +18,9 @@ const NaNProvider = createOpenAI({
   apiKey: process.env.NAN_API_KEY,
 });
 
-const nanModel = (modelId: NaNModelId) => {
-  return wrapLanguageModel({
-    model: NaNProvider(modelId),
-    middleware: defaultSettingsMiddleware({
-      settings: {
-        providerOptions: {
-          openai: { store: false } satisfies OpenAIResponsesProviderOptions,
-        },
-      },
-    }),
-  });
-};
+// /chat/completions, not /responses: NaN recommends it and may retire /responses,
+// and only this endpoint forwards `seed` (needed to repeat eval runs).
+const nanModel = (modelId: NaNModelId) => NaNProvider.chat(modelId);
 
 export const models = {
   saveModel: nanModel("mimo-v2.6-flash"),

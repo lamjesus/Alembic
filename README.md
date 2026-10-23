@@ -21,7 +21,7 @@ I save articles, web pages, PDFs, videos and notes "for later", and they never c
 - **What the code can check, the model is never asked.** Empty input never reaches the model, and the code (not the model) decides what goes to manual review (`src/utils/review.ts`).
 - **A fixed output structure guarantees shape, not truth.** The schema stops format drift, but the content is still checked in code.
 - **My projects go in the instructions, not behind a tool.** On the two models Alembic uses, asking for structured output made them skip the tool (0 calls, even with the tool marked as required); other models on the same platform did call it. So the declared list is passed as trusted context instead.
-- **Stateless calls on purpose.** The provider does not store conversations, so every call carries the full context (`store: false`, set once in the provider).
+- **Chat Completions, not Responses.** The platform recommends `/chat/completions` and may retire `/responses`. Through Responses, the SDK assumed the server kept the conversation and a multi-step tool call failed; it also drops `seed`, which evals need to get a new sample on each repeat. Every call carries the full context.
 
 ## Stack
 

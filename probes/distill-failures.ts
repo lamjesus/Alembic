@@ -49,7 +49,7 @@ for (const caso of casos) {
     // TODO: const r = await distill(contenido, modelo, rutaDelCaso);
     const r = await distill(
       contenido,
-      nan("mimo-v2.6-flash"),
+      nan.chat("mimo-v2.6-flash"),
       caso.declaredPath,
     );
     if (r.status === "failed") {
