@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 640" width="780" height="640" font-family="system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+  <rect width="780" height="640" fill="#ffffff"/>
+
+  <text x="20" y="34" font-size="20" font-weight="700" fill="#111827">distill(): the path of one saved article</text>
+
+  <!-- row 1 -->
+  <rect x="20" y="60" width="170" height="100" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="105" y="98" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">Content</text>
+  <text x="105" y="121" text-anchor="middle" font-size="14" fill="#374151">the saved article</text>
+  <text x="105" y="141" text-anchor="middle" font-size="13.5" font-style="italic" fill="#b91c1c">untrusted</text>
+
+  <rect x="250" y="60" width="180" height="100" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="340" y="98" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">Input check</text>
+  <text x="340" y="121" text-anchor="middle" font-size="14" fill="#374151">code: is it empty?</text>
+
+  <rect x="490" y="60" width="210" height="100" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="595" y="94" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">Load my projects</text>
+  <text x="595" y="117" text-anchor="middle" font-size="14" fill="#374151">and areas from a</text>
+  <text x="595" y="137" text-anchor="middle" font-size="14" fill="#374151">validated JSON file</text>
+
+  <line x1="192" y1="110" x2="246" y2="110" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="432" y1="110" x2="486" y2="110" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- row 1 exits -->
+  <line x1="340" y1="162" x2="340" y2="186" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-red)"/>
+  <rect x="250" y="190" width="180" height="64" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="340" y="217" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">skipped</text>
+  <text x="340" y="239" text-anchor="middle" font-size="13.5" fill="#374151">the model is never called</text>
+
+  <line x1="595" y1="162" x2="595" y2="186" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-red)"/>
+  <rect x="490" y="190" width="210" height="64" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="595" y="217" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">failed</text>
+  <text x="595" y="239" text-anchor="middle" font-size="13.5" fill="#374151">next step: fix config</text>
+
+  <!-- row 1 → row 2 -->
+  <path d="M702,110 L750,110 L750,276 L155,276 L155,302" fill="none" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- row 2 -->
+  <rect x="20" y="306" width="270" height="110" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="155" y="338" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">Model call</text>
+  <text x="155" y="361" text-anchor="middle" font-size="13.5" fill="#374151">instructions + my projects (trusted)</text>
+  <text x="155" y="381" text-anchor="middle" font-size="13.5" fill="#374151">article as the prompt (untrusted)</text>
+  <text x="155" y="401" text-anchor="middle" font-size="13.5" fill="#374151">asks for a fixed structure</text>
+
+  <rect x="330" y="306" width="170" height="110" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="415" y="347" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">Schema</text>
+  <text x="415" y="370" text-anchor="middle" font-size="14" fill="#374151">code: Zod checks</text>
+  <text x="415" y="390" text-anchor="middle" font-size="14" fill="#374151">the shape</text>
+
+  <rect x="540" y="296" width="200" height="130" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="640" y="326" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">Output checks</text>
+  <text x="640" y="349" text-anchor="middle" font-size="13.5" fill="#374151">code: cut off?</text>
+  <text x="640" y="369" text-anchor="middle" font-size="13.5" fill="#374151">injection flagged?</text>
+  <text x="640" y="389" text-anchor="middle" font-size="13.5" fill="#374151">repeated tags?</text>
+  <text x="640" y="409" text-anchor="middle" font-size="13.5" fill="#374151">model asks review?</text>
+
+  <line x1="292" y1="361" x2="326" y2="361" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="502" y1="361" x2="536" y2="361" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- row 2 exits -->
+  <line x1="155" y1="418" x2="155" y2="452" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-red)"/>
+  <rect x="20" y="456" width="270" height="100" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="155" y="483" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">failed, by HTTP status</text>
+  <text x="155" y="505" text-anchor="middle" font-size="13.5" fill="#374151">429, 500 → retry later</text>
+  <text x="155" y="525" text-anchor="middle" font-size="13.5" fill="#374151">400, 406 → manual review</text>
+  <text x="155" y="545" text-anchor="middle" font-size="13.5" fill="#374151">401 → fix config</text>
+
+  <line x1="640" y1="428" x2="640" y2="452" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="540" y="456" width="200" height="74" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="640" y="486" text-anchor="middle" font-size="17" font-weight="700" fill="#111827">distilled</text>
+  <text x="640" y="510" text-anchor="middle" font-size="13.5" fill="#374151">+ review: yes/no, and why</text>
+
+  <!-- legend -->
+  <rect x="20" y="584" width="14" height="14" rx="3" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="40" y="596" font-size="13.5" fill="#374151">decided by code</text>
+  <rect x="170" y="584" width="14" height="14" rx="3" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="190" y="596" font-size="13.5" fill="#374151">decided by the model</text>
+  <rect x="345" y="584" width="14" height="14" rx="3" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="365" y="596" font-size="13.5" fill="#374151">returned as a result, not thrown</text>
+  <text x="20" y="626" font-size="13.5" fill="#6b7280">The code, not the model, decides what goes to manual review (src/utils/review.ts).</text>
+</svg>

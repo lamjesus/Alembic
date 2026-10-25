@@ -6,6 +6,8 @@ I save articles, web pages, PDFs, videos and notes "for later", and they never c
 
 > **Work in progress, built in public.** I write every piece myself and post what works and what breaks along the way.
 
+![The Alembic loop: capture, distill, organize, return. Distill works, organize is in progress, capture is next and return is planned.](docs/images/loop.svg)
+
 ## Status
 
 | Step | State |
@@ -14,6 +16,12 @@ I save articles, web pages, PDFs, videos and notes "for later", and they never c
 | **Organize** | In progress: classifies into PARA (project, area, resource) using my declared projects and areas |
 | **Capture** | Next: web pages (URLs), PDFs and notes. Later: video and audio, transcribed with Whisper and fed into the same loop |
 | **Return** | Planned: answers with cited sources (RAG over pgvector) and evals in CI |
+
+## How it works
+
+One saved article goes through `distill()` (`src/index.ts`). Code checks the input before the model sees it and the output after; the model only reads and writes. Failures come back as a result with a next step instead of crashing the caller.
+
+![The path of one article through distill(): input check, loading my projects, the model call, schema validation and output checks, with the skipped and failed exits.](docs/images/distill-flow.svg)
 
 ## Decisions so far
 
