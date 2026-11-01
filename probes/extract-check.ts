@@ -26,7 +26,7 @@ type Extracted = {
 
 const isUrl = (source: string) => /^https?:\/\//i.test(source);
 
-// charset del content-type; si falta, el <meta charset> de los primeros bytes; si no, UTF-8
+// charset from the content-type; else the <meta charset> in the first bytes; else UTF-8
 function decodeHtml(bytes: Uint8Array, contentType?: string): string {
   const head = new TextDecoder("latin1").decode(bytes.slice(0, 2048));
   const charset =
@@ -47,7 +47,7 @@ async function extract(source: string): Promise<Extracted> {
   let contentType: string | undefined;
 
   if (isUrl(source)) {
-    // URL: se decide por el content-type de la respuesta
+    // URL: decided by the response content-type
     const res = await fetch(source);
     httpStatus = res.status;
     contentType = res.headers.get("content-type") ?? "";
@@ -58,7 +58,7 @@ async function extract(source: string): Promise<Extracted> {
         ? "html"
         : "unsupported";
   } else {
-    // ruta local: no hay content-type, se decide por los primeros bytes
+    // local path: there is no content-type, so it is decided by the first bytes
     bytes = new Uint8Array(await readFile(source));
     kind =
       new TextDecoder().decode(bytes.slice(0, 4)) === "%PDF"
@@ -75,7 +75,7 @@ async function extract(source: string): Promise<Extracted> {
   if (kind === "html") {
     const { document } = parseHTML(decodeHtml(bytes, contentType));
     const article = new Readability(document).parse();
-    // Readability devuelve null cuando no encuentra un artículo: se trata como vacío
+    // Readability returns null when it finds no article: treated as empty text
     return { kind, text: article?.textContent ?? "", httpStatus, contentType };
   }
 
@@ -91,22 +91,22 @@ for (const source of SOURCES) {
     const { kind, text, pages, httpStatus, contentType } = await extract(source);
     console.log("kind:", kind);
     if (httpStatus !== undefined) console.log("http:", httpStatus, contentType);
-    console.log("caracteres:", text.length);
+    console.log("characters:", text.length);
     if (pages !== undefined) {
-      console.log("páginas:", pages);
-      console.log("caracteres por página:", Math.round(text.length / pages));
+      console.log("pages:", pages);
+      console.log("characters per page:", Math.round(text.length / pages));
     }
-    console.log("primeros 300:", JSON.stringify(text.slice(0, 300)));
+    console.log("first 300:", JSON.stringify(text.slice(0, 300)));
     if (kind === "unsupported") {
-      console.log("VEREDICTO: failed, unsupported-type:", contentType ?? source);
+      console.log("VERDICT: failed, unsupported-type:", contentType ?? source);
     } else if (httpStatus === 403) {
-      console.log("VEREDICTO: failed, blocked (HTTP 403)");
+      console.log("VERDICT: failed, blocked (HTTP 403)");
     } else if (httpStatus !== undefined && (httpStatus < 200 || httpStatus > 299)) {
-      console.log("VEREDICTO: failed, http-error", httpStatus);
+      console.log("VERDICT: failed, http-error", httpStatus);
     } else if (text.length < MIN_CHARS) {
-      console.log(`VEREDICTO: failed, ${kind === "pdf" ? "no-text-layer" : "too-short"}, menos de ${MIN_CHARS} caracteres (${text.length})`);
+      console.log(`VERDICT: failed, ${kind === "pdf" ? "no-text-layer" : "too-short"}, fewer than ${MIN_CHARS} characters (${text.length})`);
     } else {
-      console.log("VEREDICTO: ok");
+      console.log("VERDICT: ok");
     }
   } catch (error) {
     console.log("ERROR:", error instanceof Error ? error.message : error);

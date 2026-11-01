@@ -49,20 +49,20 @@ export const distillCases: DistillCase[] = [
   },
   {
     name: "a pgvector tutorial is a resource",
-    input: { text: "Tutorial de pgvector para búsqueda semántica" },
+    input: { text: "pgvector tutorial for semantic search" },
     expected: { paraCategory: "RESOURCE" },
     why: "RESOURCE or AREA depending on the run",
   },
   {
     name: "the DevFest talk checklist is a project",
-    input: { text: "Checklist de la charla del DevFest" },
+    input: { text: "DevFest talk checklist" },
     expected: { paraCategory: "PROJECT" },
     // Which project it belongs to is not checkable yet: DistillationSchema has no project/area id (LR-0011).
     why: "it has a date and an end; measured PROJECT once (LR-0011)",
   },
   {
     name: "running GDG Medellín every month goes to the career area",
-    input: { text: "Cómo organizo el GDG Medellín cada mes" },
+    input: { text: "How I organize GDG Medellín every month" },
     expected: { paraCategory: "AREA" },
     // Should land in the career area, not an area of its own. Not checkable until the schema returns an area id.
     why: "decided 2026-10-10: not an area of its own; measured RESOURCE (LR-0011)",

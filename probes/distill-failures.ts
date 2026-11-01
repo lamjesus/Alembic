@@ -1,64 +1,61 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { distill } from "../src/index";
-const contenido =
+const content =
   "Vector databases store embeddings so that similar texts can be found by distance. In production, teams chunk documents, embed each chunk and retrieve the closest ones by cosine similarity.";
 
-type Caso = {
-  nombre: string;
+type Case = {
+  name: string;
   status: number;
   headers: Record<string, string>;
   declaredPath?: string;
 };
 const json = { "Content-Type": "application/json" };
-const casos: Caso[] = [
+const cases: Case[] = [
   {
-    nombre: "429  Retry-After:1 ",
+    name: "429  Retry-After:1 ",
     status: 429,
     headers: { ...json, "Retry-After": "1" },
   },
-  { nombre: "400", status: 400, headers: json },
-  { nombre: "401", status: 401, headers: json },
-  { nombre: "500", status: 500, headers: json },
-  { nombre: "403 ", status: 403, headers: json },
+  { name: "400", status: 400, headers: json },
+  { name: "401", status: 401, headers: json },
+  { name: "500", status: 500, headers: json },
+  { name: "403 ", status: 403, headers: json },
   {
-    nombre: "loadDeclared roto",
+    name: "broken loadDeclared",
     status: 200,
     headers: json,
-    declaredPath: "/no/existe.json",
+    declaredPath: "/does/not/exist.json",
   },
 ];
-// TODO: fetch falso (el de la sonda A, copiado)
-let actual: Caso = casos[0];
-let llamadas = 0;
-const fetchFalso: typeof fetch = async () => {
-  llamadas++;
+let current: Case = cases[0];
+let calls = 0;
+const fakeFetch: typeof fetch = async () => {
+  calls++;
   const body = JSON.stringify({
-    error: { message: `fake ${actual.status}`, type: "fake_error" },
+    error: { message: `fake ${current.status}`, type: "fake_error" },
   });
-  return new Response(body, { status: actual.status, headers: actual.headers });
+  return new Response(body, { status: current.status, headers: current.headers });
 };
-for (const caso of casos) {
-  actual = caso;
-  // TODO: construir el modelo con createOpenAI({ fetch: fetchFalso, ... })
+for (const testCase of cases) {
+  current = testCase;
   const nan = createOpenAI({
     apiKey: "fake",
     baseURL: "http://fake.invalid/v1",
-    fetch: fetchFalso,
+    fetch: fakeFetch,
   });
   try {
-    // TODO: const r = await distill(contenido, modelo, rutaDelCaso);
     const r = await distill(
-      contenido,
+      content,
       nan.chat("mimo-v2.6-flash"),
-      caso.declaredPath,
+      testCase.declaredPath,
     );
     if (r.status === "failed") {
-    //   console.log(caso.nombre);
+    //   console.log(testCase.name);
     //   console.log(r.status);
     //   console.log(r.nextStep);
       console.log(r)
     }
   } catch (e) {
-    console.log(`${caso.nombre} Lanzo`, (e as Error).message);
+    console.log(`${testCase.name} threw`, (e as Error).message);
   }
 }
