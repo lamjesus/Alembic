@@ -5,14 +5,13 @@ import { extractText, getDocumentProxy } from "unpdf";
 
 const SOURCES: string[] = [
   "https://alphasignal.ai/news/ccore-s-qwen3-5-4b-3d-coder-turns-text-prompts-into-3d-browser-scenes",
-  "/Users/deepspace/Downloads/Luis Sinisterra CV 2026 (2).pdf",
   "https://cincodias.elpais.com/herramientas/calculadora-irpf/",
   "https://x.com/lam_jesus19/status/2110013991938666845",
   "https://x.com/lam_jesus19/status/2110013991938666845?a=lw0WN2zDqt5wbuxW9Mw&s=20",
   "https://www.elmundo.es/",
   "https://www.zeit.de/index",
   "https://www.reddit.com/r/programming/",
-  "/Users/deepspace/Downloads/DIE ZEIT _ Nachrichten, News, Hintergründe und Debatten.pdf",
+  // add a local PDF path here: it is read from disk and checked for a text layer
 ];
 
 const MIN_CHARS = 100;
